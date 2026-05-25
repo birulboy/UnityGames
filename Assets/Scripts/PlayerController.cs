@@ -46,14 +46,14 @@ public class PlayerController : MonoBehaviour
                 StartCoroutine(ResetAttack1());
             }
         //ataque2
-        if (Input.GetKeyDown(KeyCode.K) && !isAttacking)
-            {
-                isAttacking = true;
-                rb.linearVelocity = new Vector2(0, rb.linearVelocity.y);
-                anim.SetInteger("speed", 0);
-                anim.SetTrigger("attack2");
-                StartCoroutine(ResetAttack2());
-            }
+        // if (Input.GetKeyDown(KeyCode.K) && !isAttacking)
+        //     {
+        //         isAttacking = true;
+        //         rb.linearVelocity = new Vector2(0, rb.linearVelocity.y);
+        //         anim.SetInteger("speed", 0);
+        //         anim.SetTrigger("attack2");
+        //         StartCoroutine(ResetAttack2());
+        //     }
         if ( health <= 0)
             {
                 anim.SetTrigger("notAlive");
