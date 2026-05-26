@@ -3,7 +3,7 @@ using UnityEngine;
 using System.Collections.Generic;
 public class PlayerController : MonoBehaviour
 {
-    public float moveSpeed = 4;
+    public float moveSpeed = 3;
     private Rigidbody2D rb;
     private SpriteRenderer spriteRenderer;
     private SpriteRenderer hitboxRender;
