@@ -3,7 +3,7 @@ using UnityEngine;
 using System.Collections.Generic;
 public class PlayerController2 : MonoBehaviour
 {
-    public float moveSpeed = 5;
+    private float moveSpeed = 5;
     private Rigidbody2D rb;
     private SpriteRenderer spriteRenderer;
     private SpriteRenderer hitboxRender;
@@ -16,6 +16,13 @@ public class PlayerController2 : MonoBehaviour
     [SerializeField] private Attack1HitBox attack1Hitbox;
 
     private Vector3 originalScale;
+
+    private Collider2D myCollider;
+
+    private void Awake()
+    {
+        myCollider = GetComponent<Collider2D>(); // Collider del player, no hijos
+    }
 
     void Start()
     {
@@ -80,16 +87,44 @@ public class PlayerController2 : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D other)
     {   
+        // Debug.log("Resivsando ENTRADA a hitbox");
         if (other.gameObject.CompareTag("Ground"))
         {
             IsGrounded = true;
             anim.SetInteger("height", 0);
-        }    
+        }
     }
 
     private void OnCollisionExit2D(Collision2D other)
     {
+        // Debug.log("Resivsando SALIDA a hitbox");
         if (other.gameObject.CompareTag("Ground"))
+        {
             IsGrounded = false;
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (!other.CompareTag("SlowBush")) return;
+
+        // ¿Cuál de mis colliders tocó esto?
+        // Verificamos que el arbusto esté tocando MI collider, no el hijo
+        if (other.IsTouching(myCollider))
+        {
+            Debug.Log("Entrando arbusto - collider del player");
+            moveSpeed = 2;
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        if (!other.CompareTag("SlowBush")) return;
+
+        if (!other.IsTouching(myCollider))
+        {
+            Debug.Log("Saliendo arbusto - collider del player");
+            moveSpeed = 5;
+        }
     }
 }
