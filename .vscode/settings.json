@@ -67,6 +67,6 @@
         "*.sln": "*.csproj",
         "*.slnx": "*.csproj"
     },
-    "dotnet.defaultSolution": "CompuGrafica-ProyectoUnity.slnx",
+    "dotnet.defaultSolution": "My project.slnx",
     "dotnet.enableWorkspaceBasedDevelopment": false
 }
