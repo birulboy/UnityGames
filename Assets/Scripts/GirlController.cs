@@ -5,7 +5,7 @@ public class GirlController : MonoBehaviour
 {
     [Header("Configuración")]
     public float detectionDistance = 3f;  // distancia a la que huye
-    public float runSpeed = 5f;            // velocidad de huida
+    public float runSpeed = 6f;            // velocidad de huida
     public Transform player;              // arrastrás el jugador aquí
 
     private bool isRunning = false;

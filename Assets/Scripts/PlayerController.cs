@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using System.Collections.Generic;
+
 public class PlayerController : MonoBehaviour
 {
     private float moveSpeed = 5;
@@ -39,23 +40,21 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        
-
         if (!isAttacking && !isStunned)
-            {
-                float input = Input.GetAxisRaw("Horizontal");
-                rb.linearVelocity = new Vector2(input * moveSpeed, rb.linearVelocity.y);
-                anim.SetInteger("speed", (int)input);
-                if (input > 0) transform.localScale = new Vector3(Mathf.Abs(originalScale.x), originalScale.y, originalScale.z);
-                else if (input < 0) transform.localScale = new Vector3(-Mathf.Abs(originalScale.x), originalScale.y, originalScale.z);
-            }
-        //salto
+        {
+            float input = Input.GetAxisRaw("Horizontal");
+            rb.linearVelocity = new Vector2(input * moveSpeed, rb.linearVelocity.y);
+            anim.SetInteger("speed", (int)input);
+            if (input > 0) transform.localScale = new Vector3(Mathf.Abs(originalScale.x), originalScale.y, originalScale.z);
+            else if (input < 0) transform.localScale = new Vector3(-Mathf.Abs(originalScale.x), originalScale.y, originalScale.z);
+        }
+
         if (Input.GetButtonDown("Jump") && IsGrounded)
-            {
-                rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
-                anim.SetInteger("height", 1);
-            }
-        //ataque 1
+        {
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
+            anim.SetInteger("height", 1);
+        }
+
         if (Input.GetKeyDown(KeyCode.J) && !isAttacking)
             {
                 isAttacking = true;
@@ -77,16 +76,17 @@ public class PlayerController : MonoBehaviour
     }
 
     IEnumerator ResetAttack1()
-        {
-            yield return new WaitForSeconds(0.214f);
-            attack1Hitbox.DisableHitbox();
-            isAttacking = false;
-        }
+    {
+        yield return new WaitForSeconds(0.214f);
+        attack1Hitbox.DisableHitbox();
+        isAttacking = false;
+    }
+
     IEnumerator ResetAttack2()
-        {
-            yield return new WaitForSeconds(0.700f);
-            isAttacking = false;
-        }
+    {
+        yield return new WaitForSeconds(0.700f);
+        isAttacking = false;
+    }
 
     private void OnCollisionEnter2D(Collision2D other)
     {   
