@@ -3,19 +3,29 @@ using UnityEngine;
 using System.Collections.Generic;
 public class PlayerController : MonoBehaviour
 {
-    public float moveSpeed = 3;
+    private float moveSpeed = 5;
     private Rigidbody2D rb;
     private SpriteRenderer spriteRenderer;
     private SpriteRenderer hitboxRender;
     [SerializeField] private bool IsGrounded;
-    [SerializeField] private float jumpForce = 3;
+    [SerializeField] private float jumpForce = 4;
     private Animator anim;
     private bool isAttacking = false;
+    
+    [Header("Abilities")]
+    public bool canAttack2 = false;
     public bool isStunned = false; // agregado
 
     [SerializeField] private Attack1HitBox attack1Hitbox;
 
     private Vector3 originalScale;
+
+    private Collider2D myCollider;
+
+    private void Awake()
+    {
+        myCollider = GetComponent<Collider2D>(); // Collider del player, no hijos
+    }
 
     void Start()
     {
@@ -56,14 +66,14 @@ public class PlayerController : MonoBehaviour
                 StartCoroutine(ResetAttack1());
             }
         //ataque2
-        // if (Input.GetKeyDown(KeyCode.K) && !isAttacking)
-        //     {
-        //         isAttacking = true;
-        //         rb.linearVelocity = new Vector2(0, rb.linearVelocity.y);
-        //         anim.SetInteger("speed", 0);
-        //         anim.SetTrigger("attack2");
-        //         StartCoroutine(ResetAttack2());
-        //     }
+        if (Input.GetKeyDown(KeyCode.K) && !isAttacking && canAttack2)
+            {
+                isAttacking = true;
+                rb.linearVelocity = new Vector2(0, rb.linearVelocity.y);
+                anim.SetInteger("speed", 0);
+                anim.SetTrigger("attack2");
+                StartCoroutine(ResetAttack2());
+            }
     }
 
     IEnumerator ResetAttack1()
@@ -80,16 +90,42 @@ public class PlayerController : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D other)
     {   
+        // Debug.log("Resivsando ENTRADA a hitbox");
         if (other.gameObject.CompareTag("Ground"))
         {
             IsGrounded = true;
             anim.SetInteger("height", 0);
-        }    
+        }
     }
 
     private void OnCollisionExit2D(Collision2D other)
     {
+        // Debug.log("Resivsando SALIDA a hitbox");
         if (other.gameObject.CompareTag("Ground"))
+        {
             IsGrounded = false;
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (!other.CompareTag("SlowBush")) return;
+
+        if (other.IsTouching(myCollider))
+        {
+            // Debug.Log("Entrando arbusto - collider del player");
+            moveSpeed = 2;
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        if (!other.CompareTag("SlowBush")) return;
+
+        if (!other.IsTouching(myCollider))
+        {
+            // Debug.Log("Saliendo arbusto - collider del player");
+            moveSpeed = 5;
+        }
     }
 }
