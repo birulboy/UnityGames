@@ -38,7 +38,8 @@ public class PlayerHealth : MonoBehaviour
     {
         anim.SetTrigger("notAlive");
         yield return new WaitForSeconds(3f);
+        //SceneManager.LoadScene(0);
         Destroy(gameObject);
-        SceneManager.LoadScene(0);
+        
     }
 }
