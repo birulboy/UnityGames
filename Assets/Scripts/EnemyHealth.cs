@@ -49,6 +49,8 @@ public class EnemyHealth : MonoBehaviour
     {
         anim.SetTrigger("notAliveg");
         yield return new WaitForSeconds(1f);
+
+        GameManager.Instance.score += 5;
         Destroy(gameObject);
     }
 }

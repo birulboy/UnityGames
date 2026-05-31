@@ -40,5 +40,6 @@ public class PlayerHealth : MonoBehaviour
         yield return new WaitForSeconds(3f);
         Destroy(gameObject);
         SceneManager.LoadScene(0);
+        
     }
 }

@@ -68,6 +68,8 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.K) && !isAttacking && canAttack2)
             {
                 isAttacking = true;
+                attack1Hitbox.isAttack2 = true;
+                attack1Hitbox.EnableHitbox();
                 rb.linearVelocity = new Vector2(0, rb.linearVelocity.y);
                 anim.SetInteger("speed", 0);
                 anim.SetTrigger("attack2");
@@ -85,6 +87,8 @@ public class PlayerController : MonoBehaviour
     IEnumerator ResetAttack2()
     {
         yield return new WaitForSeconds(0.700f);
+        attack1Hitbox.isAttack2 = false;
+        attack1Hitbox.DisableHitbox();
         isAttacking = false;
     }
 
