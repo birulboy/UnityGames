@@ -26,15 +26,23 @@ public class Attack1HitBox : MonoBehaviour
     }
     private void ApplyDamage(Collider2D other)
     {
-    
-    EnemyHealth enemy = other.GetComponent<EnemyHealth>();
-    if (enemy != null)
+        EnemyHealth enemy = other.GetComponent<EnemyHealth>();
+
+        if (enemy != null)
         {
             enemy.TakeDamage(damage);
-           
-            isAttacking = false; // 
+            isAttacking = false;
+            return;
         }
-    
+
+        BossHealth boss = other.GetComponent<BossHealth>();
+
+        if (boss != null)
+        {
+            boss.TakeDamage(damage);
+            isAttacking = false;
+            return;
+        }
     }
 }
 
