@@ -4770,7 +4770,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d05ec68bda4d284dbdf327a5beacfe1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BossHealth
-  maxHP: 30
+  maxHP: 200
 --- !u!114 &1033563805
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7207,9 +7207,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 86db78e4bc55b0a4e92adf87feee83a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
-  moveSpeed: 5
   IsGrounded: 0
   jumpForce: 5
+  canAttack2: 0
   isStunned: 0
   attack1Hitbox: {fileID: 0}
 --- !u!70 &1557230505
@@ -7606,7 +7606,7 @@ Transform:
   m_GameObject: {fileID: 1584386309}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -26.990473, y: 0.4884435, z: -10}
+  m_LocalPosition: {x: -26.905996, y: 0.4884435, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -9010,6 +9010,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Attack1HitBox
   damage: 10
+  isAttack2: 0
 --- !u!114 &1848388936
 MonoBehaviour:
   m_ObjectHideFlags: 0

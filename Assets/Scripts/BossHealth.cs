@@ -3,7 +3,7 @@ using System.Collections;
 
 public class BossHealth : MonoBehaviour
 {
-    public int maxHP = 30;
+    public int maxHP = 200;
 
     private int currentHP;
     private Animator anim;
