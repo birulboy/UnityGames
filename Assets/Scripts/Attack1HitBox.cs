@@ -43,27 +43,29 @@ public class Attack1HitBox : MonoBehaviour
             return;
         }
 
-        // ENEMIGO NORMAL
-        EnemyHealth enemy = other.GetComponentInParent<EnemyHealth>();
-
-        if (enemy != null)
-        {
-            enemy.TakeDamage(damage);
-
-            Debug.Log("Golpeé un enemigo");
-
-            hasHit = true;
-            return;
-        }
-
         // SKELETON
-        SkeletonHealth skeleton = other.GetComponentInParent<SkeletonHealth>();
+        SkeletonHealth skeleton =
+            other.GetComponentInParent<SkeletonHealth>();
 
         if (skeleton != null)
         {
             skeleton.TakeDamage(damage, isAttack2);
 
             Debug.Log("Golpeé un Skeleton");
+
+            hasHit = true;
+            return;
+        }
+
+        // ENEMIGOS NORMALES
+        EnemyHealth enemy =
+            other.GetComponentInParent<EnemyHealth>();
+
+        if (enemy != null)
+        {
+            enemy.TakeDamage(damage);
+
+            Debug.Log("Golpeé un enemigo");
 
             hasHit = true;
             return;

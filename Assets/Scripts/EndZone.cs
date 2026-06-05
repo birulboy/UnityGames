@@ -27,6 +27,6 @@ public class EndZone : MonoBehaviour
 
         yield return new WaitForSeconds(2f);
 
-        SceneManager.LoadScene("5");
+        SceneManager.LoadScene(5);
     }
 }
