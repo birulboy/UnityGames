@@ -1,45 +1,47 @@
 using System.Collections;
 using UnityEngine;
 
-public class EnemyController : MonoBehaviour
+public class SkeletonController : MonoBehaviour
 {
     [Header("Movimiento")]
-    public float patrolSpeed = 2f;
-    public float chaseSpeed = 3.5f;
+    public float patrolSpeed = 1.5f;
+    public float chaseSpeed = 2.5f;
     public float patrolDistance = 3f;
 
     [Header("Ataque")]
-    public float attackCooldown = 1.5f;
+    public float attackCooldown = 4f;
     public float stunDuration = 0.5f;
-    public int damage = 10;
+    public int damage = 15;
+
+    [Header("Bloqueo")]
+    public bool isBlocking = false;
+    public float blockDuration = 3f;
 
     [Header("Estado")]
     public bool playerInRange = false;
     public Transform playerTransform;
+    public bool isStunned = false;
 
     private Animator anim;
     private Rigidbody2D rb;
-    private SpriteRenderer spriteRenderer;
-    private bool isOnCooldown = false;
-    public bool isStunned = false;
-
+    private bool isAttackOnCooldown = false;
     private Vector3 startPosition;
     private int patrolDirection = 1;
     private Vector3 originalScale;
-    private Coroutine attackCoroutine; // nuevo
+    private Coroutine attackCoroutine;
+    private Coroutine blockCoroutine;
 
     void Start()
     {
         anim = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
-        spriteRenderer = GetComponent<SpriteRenderer>();
         startPosition = transform.position;
         originalScale = transform.localScale;
     }
 
     void Update()
     {
-        if (isStunned) return;
+        if (isStunned || isBlocking) return;
 
         if (playerInRange && playerTransform != null)
             ChasePlayer();
@@ -49,7 +51,7 @@ public class EnemyController : MonoBehaviour
 
     void Patrol()
     {
-        anim.SetInteger("speedg", 1);
+        anim.SetInteger("speedE", 1);
 
         if (transform.position.x >= startPosition.x + patrolDistance)
             patrolDirection = -1;
@@ -62,7 +64,7 @@ public class EnemyController : MonoBehaviour
 
     void ChasePlayer()
     {
-        anim.SetInteger("speedg", 1);
+        anim.SetInteger("speedE", 1);
 
         float direction = playerTransform.position.x > transform.position.x ? 1 : -1;
         rb.linearVelocity = new Vector2(direction * chaseSpeed, rb.linearVelocity.y);
@@ -71,11 +73,41 @@ public class EnemyController : MonoBehaviour
 
     public void TryAttackPlayer(Collider2D playerCollider)
     {
-        if (isOnCooldown) return;
+        if (isBlocking || isAttackOnCooldown || isStunned) return;
         attackCoroutine = StartCoroutine(AttackPlayer(playerCollider));
     }
 
-    public void CancelAttack() // nuevo - cancela el ataque en curso
+    // llamado desde SkeletonHealth cuando recibe J
+    public void ActivateBlock()
+    {
+
+        // cancela el ataque en curso si estaba atacando
+        if (attackCoroutine != null)
+        {
+            StopCoroutine(attackCoroutine);
+            attackCoroutine = null;
+            isStunned = false;
+        }
+
+        if (blockCoroutine != null)
+            StopCoroutine(blockCoroutine);
+
+        blockCoroutine = StartCoroutine(BlockRoutine());
+    }
+
+    IEnumerator BlockRoutine()
+    {
+        isBlocking = true;
+        rb.linearVelocity = Vector2.zero;
+        anim.SetInteger("speedE", 0);
+        anim.SetTrigger("blockE");
+
+        yield return new WaitForSeconds(blockDuration); // 3s quieto
+
+        isBlocking = false;
+    }
+
+    public void CancelAttack()
     {
         if (attackCoroutine != null)
         {
@@ -83,20 +115,19 @@ public class EnemyController : MonoBehaviour
             attackCoroutine = null;
         }
         isStunned = false;
-        isOnCooldown = false;
+        isAttackOnCooldown = false;
         rb.linearVelocity = Vector2.zero;
     }
 
     IEnumerator AttackPlayer(Collider2D playerCollider)
     {
-        isOnCooldown = true;
+        isAttackOnCooldown = true;
         isStunned = true;
         rb.linearVelocity = Vector2.zero;
 
-        anim.SetTrigger("attack1g");
-        yield return new WaitForSeconds(0.5f);
+        anim.SetTrigger("attackE");
+        yield return new WaitForSeconds(0.525f);
 
-        // verifica que el jugador sigue vivo antes de hacer daño
         if (playerCollider != null)
         {
             PlayerController player = playerCollider.GetComponent<PlayerController>();
@@ -105,8 +136,8 @@ public class EnemyController : MonoBehaviour
         }
 
         isStunned = false;
-        yield return new WaitForSeconds(attackCooldown - 0.5f);
-        isOnCooldown = false;
+        yield return new WaitForSeconds(attackCooldown); // 4s entre ataques
+        isAttackOnCooldown = false;
     }
 
     IEnumerator StunPlayer(PlayerController player)
@@ -120,7 +151,7 @@ public class EnemyController : MonoBehaviour
         player.isStunned = false;
     }
 
-    void OnDestroy() // nuevo - fix stun infinito al morir
+    void OnDestroy()
     {
         PlayerController playerController = GameObject.FindWithTag("Player")?.GetComponent<PlayerController>();
         if (playerController != null)

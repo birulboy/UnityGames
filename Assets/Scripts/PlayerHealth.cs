@@ -12,6 +12,7 @@ public class PlayerHealth : MonoBehaviour
     void Start()
     {
         anim = GetComponent<Animator>();
+        health = 100;
     }
 
     void Update()
@@ -40,5 +41,6 @@ public class PlayerHealth : MonoBehaviour
         yield return new WaitForSeconds(3f);
         Destroy(gameObject);
         SceneManager.LoadScene(0);
+        
     }
 }
