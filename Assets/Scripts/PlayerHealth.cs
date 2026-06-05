@@ -16,7 +16,7 @@ public class PlayerHealth : MonoBehaviour
 
     void Update()
     {
-        
+        health = 100;
     }
 
     public void TakeDamage(int amount)
