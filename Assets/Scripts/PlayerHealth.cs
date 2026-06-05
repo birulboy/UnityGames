@@ -12,11 +12,12 @@ public class PlayerHealth : MonoBehaviour
     void Start()
     {
         anim = GetComponent<Animator>();
+        health = 100;
     }
 
     void Update()
     {
-        health = 100;
+        
     }
 
     public void TakeDamage(int amount)
