@@ -68,7 +68,7 @@ public class BossHealth : MonoBehaviour
         Debug.Log("TRIGGER notAliveB ACTIVADO");
 
         yield return new WaitForSeconds(1f);
-
+        GameManager.Instance.score += 115;
         Destroy(gameObject);
     }
 }
